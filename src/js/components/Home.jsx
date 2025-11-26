@@ -1,28 +1,27 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import { Container } from "./Layout";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+  const someValue = "This is some random variable.";
+  const someData = [
+    "This is html stored in an array!",
+    "Which is some other real nifty tech!",
+    `Because if we can store HTML as a variable,
+     then we can do things with it
+     (like display it.)`,
+  ];
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  return (
+    <>
+      <Container>
+        <h1>{someValue}</h1>
+        <img src="https://placecats.com/300/200" alt="" />
+        {someData.map((data) => (
+          <p>{data}</p>
+        ))}
+      </Container>
+    </>
+  );
 };
 
 export default Home;
