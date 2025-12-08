@@ -1,79 +1,122 @@
 import { useEffect, useState } from "react";
 
-import BookCard from "./BookCard";
+import Button, { AnchorButton } from "./Button";
 import { Col, Container, Row } from "./Layout";
 
 import json_data from "../data";
 
 //create your first component
 const Home = () => {
-  const [books, setBooks] = useState([]);
-  const [bookIdx, setBookIdx] = useState(
-    Math.floor(Math.random() * books.length)
-  );
-
-  const [input, setInput] = useState("");
-
-  // Using useEffect to give side effects to you data.
-  // useEffect(() => {
-  //   console.log("This will run whenever input changes now!");
-  //   console.log(input);
-  // }, [input]);
+  // Welcome to the calculator app!
+  const [display, setDisplay] = useState("0");
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
-    const getData = async () => {
-      const resp = await fetch("https://library.dotlag.space/library");
-
-      if (resp.ok) {
-        const data = await resp.json();
-        setBooks(data.books);
-      }
-    };
-
-    getData();
-  }, []);
-
-  // How to deal with the double counting intervals:
-  // useEffect(() => {
-  //   const interval = setInterval(
-  //     () => console.log("This should be once a second, right?"),
-  //     1000
-  //   );
-
-  //   return () => clearInterval(interval);
-  // }, []);
+    setDisplay(JSON.stringify(value));
+  }, [value]);
 
   return (
     <>
-      {/* <Container isFluid>
-        <Row className="my-r">
-          <Col>
-            <input
-              type="text"
-              value={input}
-              onChange={(ev) => setInput(ev.target.value)}
-            />
-          </Col>
-        </Row>
-      </Container> */}
       <Container isFluid>
-        <Row className="my-3">
-          <Col className="d-flex justify-content-around">
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setBookIdx(Math.floor(Math.random() * books.length));
-              }}
-            >
-              <h2>Pick a random book to read:</h2>
-            </button>
-          </Col>
-        </Row>
-        <Row>
-          <Col colWidth={4} colOffset={4} className="d-flex flex-column gap-3">
-            {books.length ? <BookCard book={books[bookIdx]} /> : <></>}
-          </Col>
-        </Row>
+        <AnchorButton>This links will be weird.</AnchorButton>
+        <div className="row">
+          <div className="col">
+            <div className="display">{display}</div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button
+                onClick={() => setDisplay("0")}
+                buttonStyle="btn btn-warning"
+              >
+                AC
+              </Button>
+              <Button buttonStyle="btn btn-primary">()</Button>
+              <Button buttonStyle="btn btn-primary">%</Button>
+              <Button buttonStyle="btn btn-danger">÷</Button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button
+                onClick={() => setValue(value * 10 + 7)}
+                buttonStyle="btn btn-primary"
+              >
+                7
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "8")}
+                buttonStyle="btn btn-primary"
+              >
+                8
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "9")}
+                buttonStyle="btn btn-primary"
+              >
+                9
+              </Button>
+              <Button buttonStyle="btn btn-danger">×</Button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button
+                onClick={() => setDisplay(display + "4")}
+                buttonStyle="btn btn-primary"
+              >
+                4
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "5")}
+                buttonStyle="btn btn-primary"
+              >
+                5
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "6")}
+                buttonStyle="btn btn-primary"
+              >
+                6
+              </Button>
+              <Button buttonStyle="btn btn-danger">+</Button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button
+                onClick={() => setDisplay(display + "1")}
+                buttonStyle="btn btn-primary"
+              >
+                1
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "2")}
+                buttonStyle="btn btn-primary"
+              >
+                2
+              </Button>
+              <Button
+                onClick={() => setDisplay(display + "3")}
+                buttonStyle="btn btn-primary"
+              >
+                3
+              </Button>
+              <Button buttonStyle="btn btn-danger">-</Button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button buttonStyle="btn btn-primary">.</Button>
+              <Button
+                onClick={() => setDisplay(display + "0")}
+                buttonStyle="btn btn-primary"
+              >
+                0
+              </Button>
+            </div>
+          </div>
+        </div>
       </Container>
     </>
   );
