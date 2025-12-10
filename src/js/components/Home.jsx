@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import Button, { AnchorButton } from "./Button";
 import { Col, Container, Row } from "./Layout";
 
-import json_data from "../data";
-
 //create your first component
 const Home = () => {
   // Welcome to the calculator app!
