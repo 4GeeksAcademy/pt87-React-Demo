@@ -21,13 +21,32 @@ const Home = () => {
   // }, [input]);
 
   useEffect(() => {
+    // Async/await lets your async code work like normal code.
     const getData = async () => {
-      const resp = await fetch("https://library.dotlag.space/library");
+      const response = await fetch("https://library.dotlag.space/library");
 
-      if (resp.ok) {
-        const data = await resp.json();
+      if (response.ok) {
+        const data = await response.json();
         setBooks(data.books);
       }
+    };
+
+    // This is a substantive change that is going make this whole project come together.
+
+    const getDataChain = () => {
+      // Promise chaining lets you do some very nifty things,
+      // but it takes a lot more thinking to reason about.
+      console.log("This code is before the promise.");
+      fetch("https://library.dotlag.space/library")
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          console.log("This is from the promise.", data);
+        });
+      console.log("This code is after the promise.");
     };
 
     getData();
