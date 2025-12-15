@@ -4,15 +4,13 @@ import BookCard from "./BookCard";
 import { Col, Container, Row } from "./Layout";
 
 import json_data from "../data";
+import SelectMenu from "./SelectMenu";
 
 //create your first component
 const Home = () => {
   const [books, setBooks] = useState([]);
-  const [bookIdx, setBookIdx] = useState(
-    Math.floor(Math.random() * books.length)
-  );
-
-  const [input, setInput] = useState("");
+  const [selected, setSelected] = useState("1");
+  const [formBook, setFormBook] = useState({});
 
   // Using useEffect to give side effects to you data.
   // useEffect(() => {
@@ -62,35 +60,86 @@ const Home = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    const resp = await fetch("https://library.dotlag.space/library/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formBook),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      setBooks([...books, data]);
+      setFormBook({});
+    }
+  };
+
   return (
     <>
-      {/* <Container isFluid>
-        <Row className="my-r">
-          <Col>
-            <input
-              type="text"
-              value={input}
-              onChange={(ev) => setInput(ev.target.value)}
-            />
-          </Col>
-        </Row>
-      </Container> */}
       <Container isFluid>
-        <Row className="my-3">
-          <Col className="d-flex justify-content-around">
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setBookIdx(Math.floor(Math.random() * books.length));
-              }}
-            >
-              <h2>Pick a random book to read:</h2>
-            </button>
-          </Col>
-        </Row>
         <Row>
-          <Col colWidth={4} colOffset={4} className="d-flex flex-column gap-3">
-            {books.length ? <BookCard book={books[bookIdx]} /> : <></>}
+          <Col colWidth={4} colOffset={2} className="d-flex flex-column gap-3">
+            <form onSubmit={handleSubmit}>
+              <div class="mb-3">
+                <label for="book-title" class="form-label">
+                  Title
+                </label>
+                <input
+                  name="title"
+                  type="text"
+                  class="form-control"
+                  id="book-title"
+                  value={formBook?.title}
+                  onChange={(ev) =>
+                    setFormBook({
+                      ...formBook,
+                      title: ev.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div class="mb-3">
+                <label for="book-author" class="form-label">
+                  Author
+                </label>
+                <input
+                  name="author"
+                  type="text"
+                  class="form-control"
+                  id="book-author"
+                  value={formBook?.author}
+                  onChange={(ev) =>
+                    setFormBook({
+                      ...formBook,
+                      author: ev.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="mb-3">
+                <button className="btn btn-primary">Add Book</button>
+              </div>
+            </form>
+          </Col>
+          <Col colWidth={4} className="d-flex flex-column gap-3">
+            <SelectMenu
+              value={selected}
+              onChange={(ev) => setSelected(ev.target.value)}
+              options={books.map((book) => ({
+                value: book.id,
+                label: book.title,
+              }))}
+            />
+            {books.length ? (
+              <BookCard
+                book={books.find((book) => book.id == selected) || books[0]}
+              />
+            ) : (
+              <></>
+            )}
           </Col>
         </Row>
       </Container>
